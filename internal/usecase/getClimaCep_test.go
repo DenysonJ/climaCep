@@ -121,8 +121,7 @@ func TestUseCaseClimaCep_Execute(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			uc := NewUseCaseClimaCep("fake-key")
-			uc.httpClient = &http.Client{Transport: tt.transport}
+			uc := NewUseCaseClimaCep(&http.Client{Transport: tt.transport}, "fake-key")
 
 			got, err := uc.Execute(context.Background(), CepInputDTO{Cep: tt.cep})
 

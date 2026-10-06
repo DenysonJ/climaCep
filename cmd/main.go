@@ -17,7 +17,7 @@ func main() {
 		panic(err)
 	}
 
-	useCaseGetClima := usecase.NewUseCaseClimaCep(config.WeatherApiKey)
+	useCaseGetClima := usecase.NewUseCaseClimaCep(http.DefaultClient, config.WeatherApiKey)
 	cepHandler := handler.NewHandler(useCaseGetClima)
 
 	r := chi.NewRouter()

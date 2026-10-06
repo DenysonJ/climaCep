@@ -28,15 +28,6 @@ func newResponse(status int, body string) *http.Response {
 	}
 }
 
-func withTransport(t *testing.T, rt roundTripFunc) {
-	t.Helper()
-	original := http.DefaultClient.Transport
-	http.DefaultClient.Transport = rt
-	t.Cleanup(func() {
-		http.DefaultClient.Transport = original
-	})
-}
-
 func TestHandler_Get(t *testing.T) {
 	success := roundTripFunc(func(req *http.Request) (*http.Response, error) {
 		switch req.URL.Host {
@@ -87,8 +78,8 @@ func TestHandler_Get(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			withTransport(t, tt.transport)
-			h := NewHandler(usecase.NewUseCaseClimaCep("fake-key"))
+			client := &http.Client{Transport: tt.transport}
+			h := NewHandler(usecase.NewUseCaseClimaCep(client, "fake-key"))
 			req := httptest.NewRequest(http.MethodGet, "/cep?"+tt.query, nil)
 			rec := httptest.NewRecorder()
 

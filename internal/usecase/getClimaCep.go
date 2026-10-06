@@ -42,9 +42,9 @@ type UseCaseClimaCep struct {
 	weatherApiKey string
 }
 
-func NewUseCaseClimaCep(weatherApiKey string) *UseCaseClimaCep {
+func NewUseCaseClimaCep(httpClient *http.Client, weatherApiKey string) *UseCaseClimaCep {
 	return &UseCaseClimaCep{
-		httpClient:    http.DefaultClient,
+		httpClient:    httpClient,
 		weatherApiKey: weatherApiKey,
 	}
 }
