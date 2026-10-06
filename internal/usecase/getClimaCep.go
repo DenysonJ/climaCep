@@ -62,7 +62,7 @@ func (u *UseCaseClimaCep) Execute(ctx context.Context, dto CepInputDTO) (Weather
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
 
-	respCEP, doWeatherErr := http.DefaultClient.Do(req)
+	respCEP, doWeatherErr := u.httpClient.Do(req)
 	if doWeatherErr != nil {
 		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
 			log.Println("timeout calling server (300ms exceeded): %w", doWeatherErr)
@@ -90,9 +90,9 @@ func (u *UseCaseClimaCep) Execute(ctx context.Context, dto CepInputDTO) (Weather
 	if reqWeatherErr != nil {
 		return WeatherOutputDTO{}, reqWeatherErr
 	}
-	req.Header.Set("Accept", "application/json")
+	reqWeather.Header.Set("Accept", "application/json")
 
-	respWeather, doWeatherErr := http.DefaultClient.Do(reqWeather)
+	respWeather, doWeatherErr := u.httpClient.Do(reqWeather)
 	if doWeatherErr != nil {
 		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
 			log.Println("timeout calling server (300ms exceeded): %w", doWeatherErr)
