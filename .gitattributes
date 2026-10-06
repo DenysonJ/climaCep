@@ -1,0 +1,9 @@
+# O checkout no Windows com core.autocrlf=true converte para CRLF, e o gofmt considera CRLF
+# como nao-formatado — o portao de formatacao reprovava todo arquivo localmente enquanto passava
+# na CI (Linux, LF). Fixar eol=lf faz worktree local e runner verem exatamente o mesmo byte.
+*.go text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+Makefile text eol=lf
+*.md text eol=lf
+*.sh text eol=lf
