@@ -59,20 +59,20 @@ func TestHandler_Get(t *testing.T) {
 			},
 		},
 		{
-			name:  "invalid cep returns internal server error",
+			name:  "invalid cep returns unprocessable entity",
 			query: "cep=invalid",
 			transport: func(req *http.Request) (*http.Response, error) {
 				return nil, errors.New("should not be called")
 			},
-			wantStatus: http.StatusInternalServerError,
+			wantStatus: http.StatusUnprocessableEntity,
 		},
 		{
-			name:  "missing cep returns internal server error",
+			name:  "missing cep returns unprocessable entity",
 			query: "",
 			transport: func(req *http.Request) (*http.Response, error) {
 				return nil, errors.New("should not be called")
 			},
-			wantStatus: http.StatusInternalServerError,
+			wantStatus: http.StatusUnprocessableEntity,
 		},
 	}
 
