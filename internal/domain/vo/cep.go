@@ -5,13 +5,15 @@ import (
 	"regexp"
 )
 
+var ErrorInvalidCep = errors.New("invalid zipcode")
+
 type Cep struct {
 	Value string `json:"cep"`
 }
 
 func New(cep string) (*Cep, error) {
 	if !isValid(cep) {
-		return nil, errors.New("invalid cep")
+		return nil, ErrorInvalidCep
 	}
 	return &Cep{Value: cep}, nil
 }

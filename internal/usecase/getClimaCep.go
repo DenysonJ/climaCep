@@ -15,6 +15,8 @@ import (
 const VIACEPURL = "http://viacep.com.br/ws/%s/json"
 const WEATHERAPI = "http://api.weatherapi.com/v1/current.json"
 
+var ErrorCepNotFound = errors.New("can not find zipcode")
+
 type CepInputDTO struct {
 	Cep string
 }
@@ -22,6 +24,7 @@ type CepInputDTO struct {
 type CepResponse struct {
 	Cep        string `json:"cep"`
 	Localidade string `json:"localidade"`
+	Error      string `json:"erro"`
 }
 
 type WeatherAPIResponse struct {
@@ -83,6 +86,10 @@ func (u *UseCaseClimaCep) Execute(ctx context.Context, dto CepInputDTO) (Weather
 	if unmarshalErr := json.Unmarshal(bodyCEP, &cepJson); unmarshalErr != nil {
 		log.Println("unmarshalling response body CEP: %w", unmarshalErr)
 		return WeatherOutputDTO{}, unmarshalErr
+	}
+
+	if cepJson.Error != "" {
+		return WeatherOutputDTO{}, ErrorCepNotFound
 	}
 
 	url := WEATHERAPI + "?key=" + u.weatherApiKey + "&q=" + neturl.QueryEscape(cepJson.Localidade)
